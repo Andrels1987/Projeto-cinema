@@ -1,0 +1,16 @@
+Nome: Andres Caracas
+Email: ac@gmail.com
+CPF: 12329902127
+Filme: Adão Negro
+Sala: 0
+Data: 2022-01-11 - 18:30:00
+Acento: 1 Fila: 1
+Acento: 2 Fila: 1
+Acento: 3 Fila: 1
+Acento: 2 Fila: 1
+Acento: 4 Fila: 1
+Acento: 13 Fila: 3
+Acento: 14 Fila: 3
+Acento: 15 Fila: 3
+Valor unitario: 35.0
+Valor total: 105.0
