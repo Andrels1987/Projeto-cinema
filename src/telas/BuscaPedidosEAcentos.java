@@ -93,7 +93,7 @@ public class BuscaPedidosEAcentos implements Runnable {
             Exibicoes.state = Exibicoes.con.createStatement();
             Exibicoes.rs = Exibicoes.state.executeQuery("SELECT * FROM bdcinema.cadeira");
             while (Exibicoes.rs.next()) {
-                int idCadeira = Exibicoes.rs.getInt("idCADEIRA");
+                int idCadeira = Exibicoes.rs.getInt("id");
                 int fila = Exibicoes.rs.getInt("fila");
                 Acentos ac = new Acentos(idCadeira, fila);
                 acentosList.add(ac);
