@@ -74,7 +74,7 @@ public class AcentosDisponiveis extends JFrame{
                 CompraReserva.cadeirasEscolhidas = seats;
                 if((tickets.size() + quantidadeDeAcentosSelecionados) == acentos.size()){
                     CompraReserva.statusExibicao = 1;
-                    for(Exib ex : Exibicoes.exib){
+                    for(Exib ex : Exibicoes.allExibs){
                         if(ex.getIdExibicao() == exibicao.getIdExibicao()){                            
                             ex.setStatus("esgotado");
                         }

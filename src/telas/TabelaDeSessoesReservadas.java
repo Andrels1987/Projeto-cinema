@@ -26,10 +26,10 @@ import modelos.Ticket;
 public class TabelaDeSessoesReservadas extends JFrame {
     ArrayList<Integer> ids = new ArrayList<>();
     ArrayList<Ticket> pedidos;
-    Exibicoes exib;
+
 
     TabelaDeSessoesReservadas(String cpf) {
-        exib = new Exibicoes();
+    
         System.out.println("GERANDO TABELA");
         gerarTabela(cpf);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
