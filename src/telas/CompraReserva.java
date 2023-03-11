@@ -346,7 +346,7 @@ public class CompraReserva extends JFrame {
                     query += ",";
                 }
             }
-            
+            System.out.println("QUERY: " + query);
             try {
                 Exibicoes.con = Exibicoes.cdao.getConnection();
                 Exibicoes.state = Exibicoes.con.createStatement();
