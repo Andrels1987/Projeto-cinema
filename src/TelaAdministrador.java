@@ -7,6 +7,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import com.mysql.cj.log.Log;
+
 import DAO.ConnectionDao;
 import modelos.DataExibicao;
 import modelos.Filmes;
@@ -442,6 +444,7 @@ class ADMFilmeS extends JPanel implements ActionListener, PropertyChangeListener
                 TelaAdministrador.buffer = out.toByteArray();
                 TelaAdministrador.ds.send(new DatagramPacket(TelaAdministrador.buffer, TelaAdministrador.buffer.length, InetAddress.getLocalHost(), TelaAdministrador.clientPort));
                 Thread.sleep(2000);
+                System.out.println("message sent");
             }
 
         } catch (IOException | InterruptedException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | SQLException e1) {

@@ -4,6 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -33,7 +34,7 @@ public class CompraReserva extends JFrame {
     static int statusExibicao;
 
     /*************************************/
-    
+
     static ArrayList<Integer> cadeirasEscolhidas = new ArrayList<>();
     ArrayList<Exib> dataHora;
     JTextField jtcpf, jtnome, jtFilme, jtemail, jttelefone;
@@ -65,7 +66,8 @@ public class CompraReserva extends JFrame {
                 Cliente c = new Cliente("", "", "(21) ", "");
                 try {
                     Exibicoes.con = Exibicoes.cdao.getConnection();
-                    Exibicoes.preparedStatement = Exibicoes.con.prepareStatement("SELECT * FROM cliente where cpf = ?;");
+                    Exibicoes.preparedStatement = Exibicoes.con
+                            .prepareStatement("SELECT * FROM cliente where cpf = ?;");
                     Exibicoes.preparedStatement.setString(1, cpf);
                     Exibicoes.rs = Exibicoes.preparedStatement.executeQuery();
                     if (Exibicoes.rs.next()) {
@@ -172,7 +174,8 @@ public class CompraReserva extends JFrame {
                     try {
                         String query = "INSERT INTO cliente VALUES(null, ?,?,?,?)";
                         Exibicoes.con = Exibicoes.cdao.getConnection();
-                        Exibicoes.preparedStatement = Exibicoes.con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                        Exibicoes.preparedStatement = Exibicoes.con.prepareStatement(query,
+                                Statement.RETURN_GENERATED_KEYS);
                         Exibicoes.preparedStatement.setString(1, CompraReserva.cliente.getNome());
                         Exibicoes.preparedStatement.setString(2, CompraReserva.cliente.getTelefone());
                         Exibicoes.preparedStatement.setString(3, CompraReserva.cliente.getCpf());
@@ -356,27 +359,27 @@ public class CompraReserva extends JFrame {
                     Exibicoes.state = Exibicoes.con.createStatement();
                     Exibicoes.state.execute("UPDATE exibicao SET statusExibicao = 'esgotado' WHERE idExibicao = "
                             + CompraReserva.exibicao.getIdExibicao());
-
-                            Exibicoes.setStatusExibicao(filme, dataHora);
+                    Exibicoes.setStatusExibicao(filme, dataHora);
+                    Exibicoes.updateTelaExibicao();
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             } finally {
-              
-                    try {
-                        if (Exibicoes.con != null) {
-                            Exibicoes.con.close();
-                        }
-                        if (Exibicoes.rs != null) {
-                           Exibicoes.rs.close();
-                        }
-                        if (Exibicoes.preparedStatement != null) {
-                            Exibicoes.preparedStatement.close();
-                        }
-                    } catch (SQLException e1) {
-                        e1.printStackTrace();
+
+                try {
+                    if (Exibicoes.con != null) {
+                        Exibicoes.con.close();
                     }
-                
+                    if (Exibicoes.rs != null) {
+                        Exibicoes.rs.close();
+                    }
+                    if (Exibicoes.preparedStatement != null) {
+                        Exibicoes.preparedStatement.close();
+                    }
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
                 dispose();
             }
         }
