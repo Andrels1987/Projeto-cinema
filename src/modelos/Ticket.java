@@ -1,8 +1,10 @@
 package modelos;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import DAO.ConnectionDao;
@@ -20,6 +22,9 @@ public class Ticket {
     private int idCadeira;
     private String codigoPedido;
     private String statusPedido;
+    private String nomeFilme;
+    private Time horario;
+    private Date data;
 
     /*
      * public Ticket(int idSala, int idfilme, int idDataExibicao, int idCliente, int
@@ -42,6 +47,14 @@ public class Ticket {
         this.idCadeira = idCadeira;
         this.codigoPedido = codigoPedido;
         this.statusPedido = statusPedido;
+    }
+
+    public Ticket(int idPedido, String nomeFilme, Time horario, Date data, String codigoPedido){
+        this.idPedido = idPedido;
+        this.nomeFilme = nomeFilme;
+        this.horario = horario;
+        this.data = data;
+        this.codigoPedido = codigoPedido;
     }
 
     public double getValor() {
@@ -96,12 +109,38 @@ public class Ticket {
         this.statusPedido = statusPedido;
     }
 
+    
+
+    public String getNomeFilme() {
+        return nomeFilme;
+    }
+
+    public void setNomeFilme(String nomeFilme) {
+        this.nomeFilme = nomeFilme;
+    }
+
+    public Time getHorario() {
+        return horario;
+    }
+
+    public void setHorario(Time horario) {
+        this.horario = horario;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
     @Override
     public String toString() {
-        return "Ticket [cdao=" + cdao + ", con=" + con + ", state=" + state + ", rs=" + rs + ", idPedido=" + idPedido
-                + ", idExibicao=" + idExibicao + ", cpfCliente=" + cpfCliente + ", idCadeira=" + idCadeira
-                + ", codigoPedido=" + codigoPedido + ", statusPedido=" + statusPedido + "]";
+        return "Ticket [idExibicao=" + idExibicao + ", codigoPedido=" + codigoPedido +" nomeFilme=" + nomeFilme + ", horario=" + horario + ", data=" + data + "]";
     }
+
+    
 
     
 

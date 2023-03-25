@@ -7,7 +7,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import com.mysql.cj.log.Log;
+
 
 import DAO.ConnectionDao;
 import modelos.DataExibicao;

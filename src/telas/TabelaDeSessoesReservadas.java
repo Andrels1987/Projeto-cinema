@@ -2,6 +2,8 @@ package telas;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -39,17 +41,25 @@ public class TabelaDeSessoesReservadas extends JFrame {
 
     public Object[][] getReservas(String cpf) {
         pedidos = new ArrayList<>();
+        ArrayList<Ticket> tickets = new ArrayList<>();
         try {
-            String query = "SELECT * FROM pedido WHERE cpfCliente = ? AND statusPedido = ?";
+            String query = "SELECT idPedido,nomeFilme,horario,data, codigoPedido FROM pedido p " + 
+            "JOIN exibicao e ON p.idExibicao = e.idExibicao " + 
+            "JOIN filme f ON e.idFilme = f.idFilme " +
+            "JOIN data_hora dh ON e.idData = dh.idData " +
+            "WHERE cpfCliente = ? AND statusPedido = ? ";
             Exibicoes.con = Exibicoes.cdao.getConnection();
             Exibicoes.preparedStatement = Exibicoes.con.prepareStatement(query);
             Exibicoes.preparedStatement.setString(1, cpf);
             Exibicoes.preparedStatement.setString(2, "reservado");
             Exibicoes.rs = Exibicoes.preparedStatement.executeQuery();
-            while (Exibicoes.rs.next()) {
-                pedidos.add(new Ticket(Exibicoes.rs.getInt("idPEDIDO"), Exibicoes.rs.getString("cpfCliente"),
-                        Exibicoes.rs.getInt("idExibicao"), Exibicoes.rs.getInt("idCadeira"),
-                        Exibicoes.rs.getString("codigoPedido"), Exibicoes.rs.getString("statusPedido")));
+            while(Exibicoes.rs.next()){
+                int id = Exibicoes.rs.getInt("idPedido");
+                String nomeFilme = Exibicoes.rs.getString("nomeFilme");
+                Time horario = Exibicoes.rs.getTime("horario");       
+                Date data = Exibicoes.rs.getDate("data");
+                String codigoPedido = Exibicoes.rs.getString("codigoPedido");
+                pedidos.add(new Ticket(id, nomeFilme, horario, data, codigoPedido));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,12 +83,11 @@ public class TabelaDeSessoesReservadas extends JFrame {
         Object[][] res = new Object[pedidos.size()][7];
         for (int i = 0; i < pedidos.size(); i++) {
             res[i][0] = pedidos.get(i).getIdPedido();
-            res[i][1] = pedidos.get(i).getCpfCliente();
-            res[i][2] = pedidos.get(i).getIdExibicao();
-            res[i][3] = pedidos.get(i).getIdCadeira();
+            res[i][1] = pedidos.get(i).getNomeFilme();
+            res[i][2] = pedidos.get(i).getHorario();
+            res[i][3] = pedidos.get(i).getData();
             res[i][4] = pedidos.get(i).getCodigoPedido();
-            res[i][5] = pedidos.get(i).getStatusPedido();
-            res[i][6] = false;
+            res[i][5] = false;
         }
         return res;
     }
@@ -108,7 +117,7 @@ public class TabelaDeSessoesReservadas extends JFrame {
                 // quantidade de linhas da tabela afetadas em caso de sucesso na requisição
                 int success = Exibicoes.preparedStatement.executeUpdate();
                 if (success > 0) {
-                    System.out.println("ID EXIBICAO: " + pedidos.get(0).getIdExibicao());
+                   
                     String update = "UPDATE exibicao SET statusExibicao='disponivel' WHERE idExibicao = ?";
                     Exibicoes.preparedStatement = Exibicoes.con.prepareStatement(update);
                     Exibicoes.preparedStatement.setInt(1, pedidos.get(0).getIdExibicao());
@@ -159,7 +168,7 @@ public class TabelaDeSessoesReservadas extends JFrame {
 
     public void gerarTabela(String cpf) {
         // Headers for JTable
-        String[] columns = { "Id", "CPF", "Id Exibicão", "id Cadeira", "Codigo Pedido", "Status pedido",
+        String[] columns = { "IdPedido", "nomeFilme", "Data", "Horario", "Codigo Pedido",
                 "Marcar" };
         // data for JTable in a 2D table
         Object[][] data = getReservas(cpf);
@@ -205,7 +214,6 @@ public class TabelaDeSessoesReservadas extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 ExecutorService ex = Executors.newFixedThreadPool(1);
                 updateReservas(ids, btnDeletar.getActionCommand());
-
                 Runnable update = () -> {
                     for (Component c : Exibicoes.frame.getRootPane().getComponents()) {
                         if (c instanceof JLayeredPane) {
