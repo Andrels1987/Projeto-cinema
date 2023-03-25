@@ -28,29 +28,28 @@ import modelos.Ticket;
 public class TabelaDeSessoesReservadas extends JFrame {
     ArrayList<Integer> ids = new ArrayList<>();
     ArrayList<Ticket> pedidos;
+    String cpf;
 
 
     TabelaDeSessoesReservadas(String cpf) {
-    
+        this.cpf = cpf;
         System.out.println("GERANDO TABELA");
-        gerarTabela(cpf);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 300);
         setVisible(true);
     }
 
-    public Object[][] getReservas(String cpf) {
+    public Object[][] getReservas() {
         pedidos = new ArrayList<>();
-        ArrayList<Ticket> tickets = new ArrayList<>();
         try {
-            String query = "SELECT idPedido,nomeFilme,horario,data, codigoPedido FROM pedido p " + 
+            String query = "SELECT idPedido,nomeFilme,horario,data, codigoPedido, e.idExibicao FROM pedido p " + 
             "JOIN exibicao e ON p.idExibicao = e.idExibicao " + 
             "JOIN filme f ON e.idFilme = f.idFilme " +
             "JOIN data_hora dh ON e.idData = dh.idData " +
             "WHERE cpfCliente = ? AND statusPedido = ? ";
             Exibicoes.con = Exibicoes.cdao.getConnection();
             Exibicoes.preparedStatement = Exibicoes.con.prepareStatement(query);
-            Exibicoes.preparedStatement.setString(1, cpf);
+            Exibicoes.preparedStatement.setString(1, this.cpf);
             Exibicoes.preparedStatement.setString(2, "reservado");
             Exibicoes.rs = Exibicoes.preparedStatement.executeQuery();
             while(Exibicoes.rs.next()){
@@ -59,7 +58,8 @@ public class TabelaDeSessoesReservadas extends JFrame {
                 Time horario = Exibicoes.rs.getTime("horario");       
                 Date data = Exibicoes.rs.getDate("data");
                 String codigoPedido = Exibicoes.rs.getString("codigoPedido");
-                pedidos.add(new Ticket(id, nomeFilme, horario, data, codigoPedido));
+                int idExibicao = Exibicoes.rs.getInt("idExibicao");
+                pedidos.add(new Ticket(id, nomeFilme, horario, data, codigoPedido, idExibicao));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,7 +156,8 @@ public class TabelaDeSessoesReservadas extends JFrame {
                             p2.removeAll();
                             p2.repaint();
                             p2.revalidate();
-                            gerarTabela(pedidos.get(0).getCpfCliente());
+                            System.out.println("CPF : " + pedidos.get(0).getCpfCliente());
+                            gerarTabela();
                             p2.repaint();
                             p2.revalidate();
                         }
@@ -166,12 +167,12 @@ public class TabelaDeSessoesReservadas extends JFrame {
 
     }
 
-    public void gerarTabela(String cpf) {
+    public void gerarTabela() {
         // Headers for JTable
         String[] columns = { "IdPedido", "nomeFilme", "Data", "Horario", "Codigo Pedido",
                 "Marcar" };
         // data for JTable in a 2D table
-        Object[][] data = getReservas(cpf);
+        Object[][] data = getReservas();
         DefaultTableModel model = new DefaultTableModel(data, columns);
         JTable table = new JTable(model) {
             public Class<?> getColumnClass(int column) {

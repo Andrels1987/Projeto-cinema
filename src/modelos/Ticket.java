@@ -49,12 +49,13 @@ public class Ticket {
         this.statusPedido = statusPedido;
     }
 
-    public Ticket(int idPedido, String nomeFilme, Time horario, Date data, String codigoPedido){
+    public Ticket(int idPedido, String nomeFilme, Time horario, Date data, String codigoPedido, int idExibicao){
         this.idPedido = idPedido;
         this.nomeFilme = nomeFilme;
         this.horario = horario;
         this.data = data;
         this.codigoPedido = codigoPedido;
+        this.idExibicao = idExibicao;
     }
 
     public double getValor() {
